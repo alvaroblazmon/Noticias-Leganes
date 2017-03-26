@@ -10,10 +10,13 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -72,6 +75,25 @@ public class ListActivity extends AppCompatActivity{
         );
 
         loadPage(true);
+
+        BottomNavigationView bottomNavigationView = (BottomNavigationView)
+                findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_news:
+
+                            case R.id.action_schedules:
+
+                            case R.id.action_rating:
+
+                        }
+                        return true;
+                    }
+                });
 
     }
 
@@ -184,6 +206,8 @@ public class ListActivity extends AppCompatActivity{
 
 
     }
+
+
 
     private boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager)
