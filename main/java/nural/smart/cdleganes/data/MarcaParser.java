@@ -14,11 +14,15 @@ import nural.smart.cdleganes.Utils;
 
 public class MarcaParser extends XMLParser {
 
-    public static final String url = "http://estaticos.marca.com/rss/futbol/leganes.xml";
-    public static final String origen = "Marca";
+    protected static final String descriptionParserOwn = "media:description";
+    protected static final String enclosureParserOwn = "media:content";
 
-    protected static final String descriptionParser = "media:description";
-    protected static final String enclosureParser = "media:content";
+
+    public MarcaParser() {
+        super();
+        super.url = "http://estaticos.marca.com/rss/futbol/leganes.xml";
+        super.origen = "Marca";
+    }
 
     protected Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, itemParser);
@@ -34,13 +38,13 @@ public class MarcaParser extends XMLParser {
             String name = parser.getName();
             if (name.equals(titleParser)) {
                 title = readTitle(parser);
-            } else if (name.equals(descriptionParser)) {
+            } else if (name.equals(descriptionParserOwn)) {
                 description = readDescription(parser);
             } else if (name.equals(linkParser)) {
                 link = readLink(parser);
             } else if (name.equals(pubDateParser)) {
                 date = readDate(parser);
-            } else if (name.equals(enclosureParser)) {
+            } else if (name.equals(enclosureParserOwn)) {
                 imageURL = readImageURL(parser);
             } else {
                 skip(parser);
@@ -50,18 +54,17 @@ public class MarcaParser extends XMLParser {
         return new Entry(title, link, date, imageURL, description, origen);
     }
 
-    // Processes link tags in the feed.
     protected String readImageURL(XmlPullParser parser) throws IOException, XmlPullParserException {
         String imageURL = "";
-        parser.require(XmlPullParser.START_TAG, ns, enclosureParser);
+        parser.require(XmlPullParser.START_TAG, ns, enclosureParserOwn);
         imageURL = parser.getAttributeValue(null, urlParser);
         parser.nextTag();
-        parser.require(XmlPullParser.END_TAG, ns, enclosureParser);
+        parser.require(XmlPullParser.END_TAG, ns, enclosureParserOwn);
         return imageURL;
     }
 
     protected String readDescription(XmlPullParser parser) throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG, ns, descriptionParser);
+        parser.require(XmlPullParser.START_TAG, ns, descriptionParserOwn);
         String title = readText(parser);
         title = title.replace("<strong>", "");
         title = title.replace("</strong>", "");
@@ -69,11 +72,8 @@ public class MarcaParser extends XMLParser {
         title = title.replace("</dt>", "");
         title = title.replace("<dl class=\"interview\">", "");
         title = Utils.stripHtml(title).toString();
-        parser.require(XmlPullParser.END_TAG, ns, descriptionParser);
+        parser.require(XmlPullParser.END_TAG, ns, descriptionParserOwn);
         return title;
     }
-
-    public String getURLMedio(){ return url; }
-
 
 }

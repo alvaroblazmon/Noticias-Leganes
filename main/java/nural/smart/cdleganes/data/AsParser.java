@@ -6,12 +6,9 @@ package nural.smart.cdleganes.data;
 
 public class AsParser extends XMLParser {
 
-    public static final String url = "http://masdeporte.as.com/tag/rss/cd_leganes/a";
-    private static final String origen = "AS";
-
-    protected String getOrigen(){
-        return origen;
+    public AsParser() {
+        super();
+        super.url = "http://masdeporte.as.com/tag/rss/cd_leganes/a";
+        super.origen = "AS";
     }
-
-    public String getURLMedio() { return url; }
 }

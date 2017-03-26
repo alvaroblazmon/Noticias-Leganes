@@ -18,21 +18,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import nural.smart.cdleganes.adapter.EntryAdapter;
-import nural.smart.cdleganes.data.AsParser;
-import nural.smart.cdleganes.data.LeganesParser;
-import nural.smart.cdleganes.data.MarcaParser;
+import nural.smart.cdleganes.data.XMLNetwork;
 import nural.smart.cdleganes.data.XMLParser;
 
 /**
@@ -144,10 +134,10 @@ public class ListActivity extends AppCompatActivity{
         @Override
         protected List<XMLParser.Entry> doInBackground(Object... urls) {
             try {
-                return loadXmlFromNetwork();
+                List<XMLParser.Entry> entries = XMLNetwork.loadXmlFromNetwork();
+                entries = XMLNetwork.orderByDate(entries);
+                return entries;
             } catch (IOException e) {
-                return null;
-            } catch (XmlPullParserException e) {
                 return null;
             }
         }
@@ -193,56 +183,6 @@ public class ListActivity extends AppCompatActivity{
         }
 
 
-    }
-
-    private List<XMLParser.Entry> loadXmlFromNetwork() throws XmlPullParserException, IOException {
-        InputStream stream = null;
-        // Instantiate the parser
-        LeganesParser leganesParser = new LeganesParser();
-        AsParser asParser = new AsParser();
-        MarcaParser marcaParser = new MarcaParser();
-
-        ArrayList<XMLParser> medios = new ArrayList();
-        medios.add(leganesParser);
-        medios.add(asParser);
-        medios.add(marcaParser);
-
-        List<LeganesParser.Entry> entries = new ArrayList();
-
-        for(XMLParser medio : medios){
-            try {
-                stream = downloadUrl(medio.getURLMedio());
-                entries.addAll(medio.parse(stream));
-            } finally {
-                if (stream != null) {
-                    stream.close();
-                }
-            }
-        }
-
-        Collections.sort(entries, new Comparator<XMLParser.Entry>() {
-            @Override
-            public int compare(XMLParser.Entry entry, XMLParser.Entry t1) {
-                return t1.date.compareTo(entry.date);
-            }
-        });
-
-
-        return entries;
-    }
-
-    // Given a string representation of a URL, sets up a connection and gets
-    // an input stream.
-    private InputStream downloadUrl(String urlString) throws IOException {
-        java.net.URL url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(10000 /* milliseconds */);
-        conn.setConnectTimeout(15000 /* milliseconds */);
-        conn.setRequestMethod("GET");
-        conn.setDoInput(true);
-        // Starts the query
-        conn.connect();
-        return conn.getInputStream();
     }
 
     private boolean isOnline() {

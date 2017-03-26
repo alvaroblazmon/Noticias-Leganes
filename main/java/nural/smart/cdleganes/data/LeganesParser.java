@@ -6,13 +6,10 @@ package nural.smart.cdleganes.data;
 
 public class LeganesParser extends XMLParser {
 
-    public static final String url = "http://www.deportivoleganes.com/rss";
-    public static final String origen = "Oficial Leganés";
-
-    protected String getOrigen(){
-        return origen;
+    public LeganesParser() {
+        super();
+        super.url = "http://www.deportivoleganes.com/rss";
+        super.origen = "Oficial Leganés";
     }
-
-    public String getURLMedio(){ return url; }
 
 }

@@ -35,6 +35,9 @@ public class XMLParser {
 
     protected static final String urlParser = "url";
 
+    protected String url = "";
+    protected String origen = "";
+
     public static class Entry {
         public final String title;
         public final String link;
@@ -99,8 +102,6 @@ public class XMLParser {
 
     }
 
-    // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
-// to their respective "read" methods for processing. Otherwise, skips the tag.
     protected Entry readEntry(XmlPullParser parser) throws XmlPullParserException, IOException {
         parser.require(XmlPullParser.START_TAG, ns, itemParser);
         String title = null;
@@ -134,7 +135,7 @@ public class XMLParser {
 
     protected String getOrigen(){
 
-        return "";
+        return origen;
     }
 
     // Processes title tags in the feed.
@@ -221,5 +222,5 @@ public class XMLParser {
         }
     }
 
-    public String getURLMedio(){ return ""; }
+    public String getURLMedio(){ return url; }
 }
