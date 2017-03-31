@@ -36,6 +36,16 @@ public class WebViewFragment extends Fragment {
         final WebView webView = (WebView) view.findViewById(R.id.schedule_web_view);
         Bundle args = getArguments();
         String url = args.getString(urlKey, "");
+
+        /*webView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress) {
+                getActivity().setTitle("Loading...");
+                getActivity().setProgress(progress * 100);
+
+                if(progress == 100)
+                    getActivity().setTitle(R.string.app_name);
+            }
+        });*/
         webView.loadUrl(url);
 
         return view;

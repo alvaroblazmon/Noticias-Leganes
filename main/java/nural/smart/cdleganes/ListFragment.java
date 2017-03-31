@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class ListFragment extends Fragment {
 
     private ProgressDialog progress;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+
     public static ListFragment newInstance() {
         ListFragment fragment = new ListFragment();
         return fragment;
@@ -54,6 +59,8 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view =  inflater.inflate(R.layout.fragment_list, container, false);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
 
         mListView = (ListView) view.findViewById(R.id.recipe_list_view);
 
@@ -141,6 +148,10 @@ public class ListFragment extends Fragment {
                     detailIntent.putExtra("url", selectedRecipe.link);
 
                     startActivityForResult(detailIntent, 0);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, selectedRecipe.link);
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 }
 
             });

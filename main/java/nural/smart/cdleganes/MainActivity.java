@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 /**
  * Created by alvaro on 27/3/17.
  */
@@ -18,14 +20,25 @@ public class MainActivity  extends AppCompatActivity {
     private final String scheduleURL = "http://resultados.as.com/resultados/ficha/equipo/leganes/132/calendario/";
     private final String tableURL = "http://resultados.as.com/resultados/futbol/primera/clasificacion/";
 
-    //private Fragment listFragment = ListFragment.newInstance();
-    //private Fragment scheduleFragment = WebViewFragment.newInstance(scheduleURL);
-    //private Fragment tableFragment = WebViewFragment.newInstance(tableURL);
+    private final String idListFragment = "LIST";
+    private final String idScheduleFragment = "SCHEDULE";
+    private final String idTableFragment = "TABLE";
+
+    private Fragment listFragment = ListFragment.newInstance();
+    private Fragment scheduleFragment = WebViewFragment.newInstance(scheduleURL);
+    private Fragment tableFragment = WebViewFragment.newInstance(tableURL);
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    //TODO: Controlar funcionamiento cuando se gira la pantalla
+    //TODO: Spinner en los WebViews
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -44,50 +57,69 @@ public class MainActivity  extends AppCompatActivity {
                 (new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        Fragment selectedFragment = null;
-                        String idFragment = "";
+
                         switch (item.getItemId()) {
                             case R.id.action_news:
-
-                                idFragment = "News";
-                                selectedFragment = getSupportFragmentManager().findFragmentByTag(idFragment);
-                                if(selectedFragment == null) {
-                                    selectedFragment = ListFragment.newInstance();
-                                }
-                                getSupportFragmentManager().popBackStack(idFragment, 0);
+                                displayListFragment();
                                 break;
                             case R.id.action_schedules:
-                                selectedFragment = WebViewFragment.newInstance(scheduleURL);
-                                idFragment = "Schedules";
-                                FragmentTransaction transaction2 = getSupportFragmentManager().beginTransaction();
-                                transaction2.replace(R.id.frame_layout, selectedFragment, idFragment);
-                                transaction2.addToBackStack(null);
-                                transaction2.commit();
+                                displayScheduleFragment();
                                 break;
                             case R.id.action_rating:
-                                selectedFragment = WebViewFragment.newInstance(tableURL);
-                                idFragment = "Rating";
+                                displayTableFragment();
                                 break;
                         }
-                        //FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                        //transaction.replace(R.id.frame_layout, selectedFragment, idFragment);
-                        //transaction.addToBackStack(null);
-                        //transaction.commit();
+
                         return true;
                     }
                 });
 
         if (savedInstanceState == null) {
-            //Manually displaying the first fragment - one time only
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.frame_layout, ListFragment.newInstance(), "News");
-            transaction.commit();
-
-            //Used to select an item programmatically
+            displayListFragment();
+            //TODO: Intentar hacer esto en el XML
             bottomNavigationView.getMenu().getItem(0).setChecked(true);
         }
+    }
+
+    private void displayListFragment() {
+        displayFragment(listFragment, idListFragment, idScheduleFragment, idTableFragment);
+    }
+
+    private void displayScheduleFragment() {
+        displayFragment(scheduleFragment, idScheduleFragment, idListFragment, idTableFragment);
+    }
+
+    private void displayTableFragment() {
+        displayFragment(tableFragment, idTableFragment, idScheduleFragment, idListFragment);
+    }
+
+    private void displayFragment(Fragment showFragment, String idShowFragment, String idHideFragment1, String idHideFragment2){
 
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment prevShowFragment = getSupportFragmentManager().findFragmentByTag(idShowFragment);
+        Fragment prevHideFragment1 = getSupportFragmentManager().findFragmentByTag(idHideFragment1);
+        Fragment prevHideFragment2 = getSupportFragmentManager().findFragmentByTag(idHideFragment2);
+
+        if(prevShowFragment == null){
+            transaction.add(R.id.frame_layout, showFragment, idShowFragment);
+        } else {
+            transaction.show(prevShowFragment);
+        }
+
+        if(prevHideFragment1 != null && prevHideFragment1.isVisible()){
+            transaction.hide(prevHideFragment1);
+        }
+
+        if(prevHideFragment2 != null && prevHideFragment2.isVisible()){
+            transaction.hide(prevHideFragment2);
+        }
+
+        transaction.commit();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, idShowFragment);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }
 }
