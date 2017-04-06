@@ -21,13 +21,9 @@ public class EntryDetailActivity extends AppCompatActivity {
 
         String title = this.getIntent().getExtras().getString("title");
         String url = this.getIntent().getExtras().getString("url");
-        //url = "https://www.youtube.com/results?q=resumenes+cd+leganes+highlights+laliga+santander+suscribete+al+canal+oficial+de&sp=CAI%253D";
-        //url = "https://www.youtube.com/playlist?list=PLBTaSXagq1CAzf9wwFWJt-_7px3twGT9s";
 
         setTitle(title);
         mWebView = (WebView) findViewById(R.id.detail_web_view);
-        //mWebView.setWebChromeClient(new WebChromeClient());
-        //mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.loadUrl(url);
     }
 
@@ -55,8 +51,6 @@ public class EntryDetailActivity extends AppCompatActivity {
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, "Noticias CD Leganés: " +this.getIntent().getExtras().getString("url") );
                 sendIntent.setType("text/plain");
-                //startActivity(sendIntent);
-                //setShareIntent(sendIntent);
                 startActivity(Intent.createChooser(sendIntent, "Compartir"));
 
                 return true;
