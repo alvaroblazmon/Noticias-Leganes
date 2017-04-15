@@ -66,14 +66,6 @@ public class EntryAdapter extends BaseAdapter{
             holder.subtitleTextView = (TextView) convertView.findViewById(R.id.recipe_list_subtitle);
             holder.detailTextView = (TextView) convertView.findViewById(R.id.recipe_list_detail);
 
-            Typeface titleTypeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/Quicksand-Bold.otf");
-            Typeface subtitleTypeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/JosefinSans-Bold.ttf");
-            Typeface detailTypeFace = Typeface.createFromAsset(mContext.getAssets(), "fonts/JosefinSans-SemiBoldItalic.ttf");
-
-            //holder.titleTextView.setTypeface(titleTypeFace);
-            //holder.subtitleTextView.setTypeface(subtitleTypeFace);
-            //holder.detailTextView.setTypeface(detailTypeFace);
-
             convertView.setTag(holder);
         }
         else{
@@ -90,12 +82,9 @@ public class EntryAdapter extends BaseAdapter{
         titleTextView.setText(entry.title);
         subtitleTextView.setText(entry.description);
 
-        //DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         String timeAgo = Utils.getTimeDiff(entry.date);
         String detailText = entry.origen + " - " + timeAgo;
         detailTextView.setText(detailText);
-
-        //detailTextView.setText(Utils.getDifferenceNow(entry.date));
 
         Picasso.with(mContext).load(entry.imageURL).placeholder(R.mipmap.ic_launcher_bn).into(thumbnailImageView);
 
