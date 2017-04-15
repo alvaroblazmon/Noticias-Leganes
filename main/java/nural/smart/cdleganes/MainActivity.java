@@ -32,6 +32,7 @@ public class MainActivity  extends AppCompatActivity {
 
     //TODO: Controlar funcionamiento cuando se gira la pantalla
     //TODO: Spinner en los WebViews
+    //TODO: Poner en funciones todos los eventos Firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +119,7 @@ public class MainActivity  extends AppCompatActivity {
         transaction.commit();
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, idShowFragment);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, idShowFragment);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
     }

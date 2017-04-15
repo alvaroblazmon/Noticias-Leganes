@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ProgressBar;
+
+import nural.smart.cdleganes.components.MyWebViewClient;
 
 /**
  * Created by alvaro on 27/3/17.
@@ -33,19 +36,13 @@ public class WebViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view =  inflater.inflate(R.layout.fragment_webview, container, false);
 
-        final WebView webView = (WebView) view.findViewById(R.id.schedule_web_view);
+
         Bundle args = getArguments();
         String url = args.getString(urlKey, "");
 
-        /*webView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress) {
-                getActivity().setTitle("Loading...");
-                getActivity().setProgress(progress * 100);
-
-                if(progress == 100)
-                    getActivity().setTitle(R.string.app_name);
-            }
-        });*/
+        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBarWebView);
+        final WebView webView = (WebView) view.findViewById(R.id.schedule_web_view);
+        webView.setWebViewClient(new MyWebViewClient(progressBar));
         webView.loadUrl(url);
 
         return view;
