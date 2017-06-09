@@ -61,7 +61,7 @@ public class EntryDetailActivity extends AppCompatActivity {
 
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, "Noticias CD Leganés: " + url);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, url +  " " + "App: Noticias Leganes, Twitter: @ThisIsButarque");
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, "Compartir"));
 
