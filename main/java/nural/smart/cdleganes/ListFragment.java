@@ -175,6 +175,7 @@ public class ListFragment extends Fragment {
     }
 
     private void showError() {
+        //TODO: Error getContext is NULL
         AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
         builder1.setMessage("No se han podido descargar las noticias");
         builder1.setCancelable(true);
