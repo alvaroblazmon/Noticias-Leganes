@@ -22,7 +22,8 @@ public class XMLNetwork {
     private static final XMLParser[] medios = {new AsParser(),
             new LeganesParser(),
             new MarcaParser(),
-            new MundoDeportivoParser()};
+            new MundoDeportivoParser(),
+            new HoraBlanquiazul()};
 
     /* milliseconds */
     private static final int READTIMEOUT = 10000;
