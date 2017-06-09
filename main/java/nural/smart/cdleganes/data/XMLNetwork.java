@@ -39,9 +39,9 @@ public class XMLNetwork {
                 stream = downloadUrl(medio.getURLMedio());
                 entries.addAll(medio.parse(stream));
             } catch (IOException ioException){
-                Log.e("XMLNetwork", ioException.getMessage());
+                //Log.e("XMLNetwork", ioException.getMessage());
             } catch (XmlPullParserException parserException) {
-                Log.e("XMLNetwork", parserException.getMessage());
+                //Log.e("XMLNetwork", parserException.getMessage());
             } finally {
                 if (stream != null) {
                     stream.close();
