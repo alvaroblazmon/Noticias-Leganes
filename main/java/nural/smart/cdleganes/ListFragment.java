@@ -120,6 +120,10 @@ public class ListFragment extends Fragment {
             if(result==null || result.isEmpty()){
                 showError();
             } else {
+                //TODO: Solucionar error de NULL
+                //https://stackoverflow.com/questions/27477167/getactivity-return-null-in-fragment-onactivitycreated-in-some-rooted-device
+                //https://stackoverflow.com/questions/42850194/fragment-getactivity-is-always-returning-null-from-async-task
+                //https://stackoverflow.com/questions/18683797/calling-getactivity-inside-a-fragment-returns-null
                 EntryAdapter adapter = new EntryAdapter(getActivity(), result);
                 mListView.setAdapter(adapter);
             }
